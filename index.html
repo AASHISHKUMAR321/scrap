@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <form class="col s12">
+        <div class="row">
+            <div class="input-field col s6">
+                <label for="">Location</label>
+                <input id="location" type="text" class="validate" placeholder="Enter location" />
+            </div>
+            <div class="input-field col s6">
+                <label for="">Name</label>
+                <input id="tech" type="tel" class="validate" placeholder="Enter job name" />
+            </div>
+        </div>
+        <div class="row center-align">
+            <button class="btn waves-effect waves-light" type="submit" name="action">
+          Start Scraping
+        </button>
+        </div>
+    </form>
+</body>
+
+</html>
+
+<script>
+    submit = document.querySelector(".btn");
+    async function postData() {
+        const locationInput = document.querySelector("#location").value,
+            techInput = document.querySelector("#tech").value,
+            customURL = `https://www.google.com/search?ei=HSq0Xt7IDoz5gQbGip6ABg&q=${techInput}+${locationInput}&oq=${techInput}+${locationInput}+jobs+&gs_lcp=CgZwc3ktYWIQAzIFCCEQoAEyBQghEKABMgUIIRCgATIFCCEQoAE6BggAEAgQHjoGCAAQFhAeUOYSWNIXYIIZaABwAHgAgAGrAYgB7QaSAQM1LjOYAQCgAQGqAQdnd3Mtd2l6&sclient=psy-ab&uact=5&ibp=htl;jobs&sa=X&ved=2ahUKEwiH6N6-iaLpAhX9QUEAHTWjBGMQiYsCKAF6BAgKEBE#fpstate=tldetail&htivrt=jobs&htidocid=odTsQfLDpmatfzNQAAAAAA%3D%3D`,
+            dataToSend = {
+                customURL,
+                techInput,
+            },
+            fetchOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataToSend),
+            };
+        const response = await fetch("http://localhost:2323/search", fetchOptions);
+
+        const data = await response.json();
+        console.log(data);
+
+        data.titles.map((e) => {
+            let div = document.createElement("div");
+            let p = document.createElement("p");
+            p.textContent = e;
+            div.append(p);
+            document.body.append(div);
+        });
+    }
+    submit.addEventListener("click", (e) => {
+        e.preventDefault();
+        postData();
+    });
+    // //get arrays of  the data returned
+    // let titleArray = data.titles;
+    // hrefArray = data.hrefs;
+</script>
